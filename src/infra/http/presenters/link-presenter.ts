@@ -8,7 +8,7 @@ export class LinkPresenter {
       id: link.id.toString(),
       url: link.url,
       shortUrl: link.shorturl.value,
-      localUrl: `${baseUrl}/shorten/${link.shorturl.value}`,
+      localUrl: `${baseUrl}shorten/${link.shorturl.value}`,
       clicks: link.clicks,
       createdAt: link.createdAt,
     };

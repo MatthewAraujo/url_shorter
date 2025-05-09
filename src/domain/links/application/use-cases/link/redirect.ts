@@ -25,6 +25,7 @@ export class RedirectLinksUseCase {
 			return err(new ResourceNotFoundError())
 		}
 
+		await this.linksRepository.incrementClickById(link.id.toString())
 		return ok({
 			url: link.url,
 		})

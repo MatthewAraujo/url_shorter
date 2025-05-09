@@ -26,15 +26,17 @@ export class CreateLinkUseCase {
 			clicks: 0,
 			shorturl: ShortUrl.createFromUserUrl(url),
 			url,
-		})
+		});
 
-		const shortUrlAlreadyExists = this.linksRepository.findByShortUrl(link.shorturl.value)
+		const existingLink = await this.linksRepository.findByShortUrl(link.shorturl.value);
 
+		if (existingLink) {
+			return ok({ link: existingLink });
+		}
 
-		await this.linksRepository.create(link)
+		await this.linksRepository.create(link);
 
-		return ok({
-			link,
-		})
+		return ok({ link });
 	}
 }
+

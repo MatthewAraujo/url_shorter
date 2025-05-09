@@ -52,5 +52,17 @@ export class PrismaLinksRepository implements LinksRepository {
 
     return PrismaLinkMapper.toDomain(link)
   }
+
+  async incrementClickById(id: string): Promise<void> {
+    await this.prisma.url.update({
+      where: { id },
+      data: {
+        clicks: {
+          increment: 1,
+        },
+      },
+    });
+  }
+
 }
 
