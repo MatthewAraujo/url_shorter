@@ -1,0 +1,16 @@
+@baseUrl = http://localhost:3333
+###
+
+# @name create_short
+POST {{baseUrl}}/link
+Content-Type: application/json
+
+{
+ "url": "https://www.youtube.com/watch?v=JQ8knaeko3c"
+}
+
+###
+
+# @name list_shorten
+GET {{baseUrl}}/shorten
+Content-Type: application/json
