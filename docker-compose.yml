@@ -11,3 +11,39 @@ services:
       PGDATA: /data/postgres
     volumes:
       - ./data/pg:/data/postgres
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  reverse-proxy:
+    image: traefik:v3.3
+    command:
+      - --entrypoints.shortener.address=:9000
+      - --providers.docker
+      - --api=false
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - default
+
+  nest:
+    build: .
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 3000:3000
+    networks:
+      - default
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+
+networks:
+  default:
+    driver: bridge
