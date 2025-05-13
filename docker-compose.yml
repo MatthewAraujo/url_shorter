@@ -20,13 +20,13 @@ services:
   reverse-proxy:
     image: traefik:v3.3
     command:
-      - --entrypoints.shortener.address=:9000
-      - --providers.docker
-      - --api=false
+      - --configFile=/traefik/traefik.toml
     ports:
-      - "9000:9000"
+      - "9000:9000"  # app entrypoint
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik/traefik.toml:/traefik/traefik.toml    
+      - ./traefik/conf:/traefik/conf                          
     networks:
       - default
 

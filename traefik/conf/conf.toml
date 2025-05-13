@@ -1,0 +1,15 @@
+[http.routers]
+  [http.routers.api-router]
+    rule = "PathPrefix(`/api`)"
+    entryPoints = ["shortener"]
+    service = "nest-service"
+    middlewares = ["strip-api-prefix"]
+
+[http.middlewares]
+  [http.middlewares.strip-api-prefix.stripPrefix]
+    prefixes = ["/api"]
+
+[http.services]
+  [http.services.nest-service.loadBalancer]
+    [[http.services.nest-service.loadBalancer.servers]]
+      url = "http://nest:3000"

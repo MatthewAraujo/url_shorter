@@ -1,0 +1,8 @@
+[entryPoints]
+  [entryPoints.shortener]
+    address = ":9000"
+
+[providers]
+  [providers.file]
+    directory = "/traefik/conf"
+    watch = true

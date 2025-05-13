@@ -3,7 +3,7 @@ import { Link } from "@/domain/links/enterprise/entities/link";
 export class LinkPresenter {
   static toHTTP(link: Link) {
     const host = process.env.BASE_URL ?? "http://localhost";
-    const port = process.env.PORT ?? 3000;
+    const port = process.env.REVESE_PROXY_PORT ?? 3000;
 
     const baseUrl = `${host}:${port}`;
 
