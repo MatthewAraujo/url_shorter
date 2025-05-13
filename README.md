@@ -1,4 +1,4 @@
-```markdown
+
 # 🔗 URL Shortener Backend
 
 A complete URL shortener backend implementation using **NestJS**, **Prisma**, **PostgreSQL**, and **Traefik** as a reverse proxy. Fully containerized with Docker Compose, this project offers a RESTful API for creating and managing short links, with dynamic redirection based on path.
