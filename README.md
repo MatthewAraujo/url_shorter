@@ -1,59 +1,131 @@
-# Hotel Booking API
+```markdown
+# 🔗 URL Shortener Backend
 
-A robust and scalable REST API for hotel booking management built with NestJS, TypeScript, and Prisma.
+A complete URL shortener backend implementation using **NestJS**, **Prisma**, **PostgreSQL**, and **Traefik** as a reverse proxy. Fully containerized with Docker Compose, this project offers a RESTful API for creating and managing short links, with dynamic redirection based on path.
 
-## Features
+---
 
-- User authentication and authorization
-- Hotel management
-- Room management with different types (Single, Double, Suite)
-- Reservation system
-- Review and rating system
-- Role-based access control
+## 📦 Stack
 
-## Tech Stack
+- **Backend Framework**: [NestJS](https://nestjs.com/)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **Database**: PostgreSQL
+- **Proxy**: [Traefik](https://traefik.io/) (v3)
+- **Containerization**: Docker + Docker Compose
 
-- **Framework**: NestJS
-- **Language**: TypeScript
-- **Database ORM**: Prisma
-- **Authentication**: JWT (JSON Web Tokens)
-- **Validation**: Zod
-- **Testing**: Vitest
-- **Code Quality**: Biome
-- **Package Manager**: pnpm
+---
 
-## Prerequisites
+## 🚀 Features
 
-- Node.js (Latest LTS version recommended)
-- pnpm (v10.6.5 or higher)
-- PostgreSQL (for production)
-- Docker (optional, for containerization)
+- 🔗 Create and manage short URLs
+- 🔁 Dynamic redirection based on path
+- 🌐 Reverse proxy routing with Traefik
+- 🧠 Click metrics (IP, User-Agent, Timestamp)
+- ⚙️ Fully containerized environment
 
-## API Documentation
+---
 
-### Core Entities
 
-- **User**: Authentication and user management
-- **Hotel**: Hotel information and management
-- **Room**: Room types and availability
-- **Reservation**: Booking management
-- **Review**: User reviews and ratings
+## 🐳 Running the Project
 
-### Authentication
+### Prerequisites
 
-The API uses JWT for authentication. Include the token in the Authorization header:
-```
-Authorization: Bearer <your-token>
-```
+- Docker
+- Docker Compose
 
-## Code Quality
+### 1. Clone the Repo
 
-Run linter:
 ```bash
-pnpm lint
+git clone https://github.com/MatthewAraujo/url_shorter.git
+cd url-shorter
+````
+
+### 2. Set Up Environment
+
+Create a `.env` file:
+
+```env
+DATABASE_URL=postgresql://postgres:docker@postgres:5432/short
+BASE_URL=http://localhost
+PORT=3000
+REVERSE_PROXY_PORT=9000
 ```
 
-Fix linting issues:
+### 3. Start Containers
+
 ```bash
-pnpm lint:fix
+docker compose up --build
+```
+
+This will start:
+
+* PostgreSQL
+* Traefik (on port `9000`)
+* NestJS backend (proxied via Traefik)
+
+---
+
+## 📡 API Endpoints
+
+### POST `/api/shorten`
+
+Create a short link.
+
+**Body:**
+
+```json
+{
+  "url": "https://example.com/very/long/link"
+}
+```
+
+**Response:**
+
+```json
+{
+  "short_url": "http://localhost:9000/abc123",
+  "original_url": "https://example.com/very/long/link"
+}
+```
+
+---
+
+### GET `/:short_code`
+
+Redirects to the original URL.
+
+Example:
+
+```bash
+curl -i http://localhost:9000/abc123
+```
+
+Returns a `302 Found` redirect.
+
+---
+
+### GET `/api/links`
+
+List all shortened URLs with click counts.
+
+---
+
+### DELETE `/api/links/:short_code`
+
+Delete a shortened URL by its code.
+
+---
+
+## ⚙️ Traefik Configuration
+
+The `traefik.toml` sets up entry points and file providers. The `conf.toml` inside `/traefik/conf/` defines the dynamic routes.
+
+Example route:
+
+```toml
+[http.routers.api-router]
+  rule = "PathPrefix(`/api`)"
+  entryPoints = ["shortener"]
+  service = "nest-service"
+  middlewares = ["strip-api-prefix"]
 ```

@@ -9,16 +9,15 @@ export class PrismaLinksRepository implements LinksRepository {
   constructor(private prisma: PrismaService) { }
 
   async findByShortUrl(shortUrl: string): Promise<Link | null> {
-    const link = await this.prisma.url.findFirst({
-      where: {
-        shortUrl: shortUrl,
-      },
+    const link = await this.prisma.url.findUnique({
+      where: { shortUrl: shortUrl.trim() }
     })
 
     if (!link) return null
 
     return PrismaLinkMapper.toDomain(link)
   }
+
 
   async findMany(): Promise<Link[] | null> {
     const links = await this.prisma.url.findMany()

@@ -7,7 +7,6 @@ import {
 } from '@nestjs/common'
 
 import { DeleteLinkUseCase } from '@/domain/links/application/use-cases/link/delete'
-import { url } from 'inspector'
 
 @Controller('/shorten')
 export class DeleteLinkController {
@@ -20,11 +19,12 @@ export class DeleteLinkController {
       url
     })
 
+
     if (result.isErr()) {
       throw new BadRequestException('Error deleting link')
     }
 
-    return { link: result.value }
+    return
   }
 }
 

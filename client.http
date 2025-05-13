@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:9000/api 
+@baseUrl = http://localhost:3000 
 ###
 
 # @name create_short
@@ -19,4 +19,10 @@ Content-Type: application/json
 # @name redirect
 @short_link="deb29b"
 
-GET {{baseUrl}}/shorten/@{{short_link}}
+GET {{baseUrl}}/shorten/{{short_link}}
+
+
+### 
+# @name delete
+
+DELETE {{baseUrl}}/shorten/b894c0
